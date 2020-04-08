@@ -1,0 +1,1 @@
+usermod -u $UID postgres

@@ -1,0 +1,89 @@
+version: "3.7"
+services:
+  node_backend:
+    image: node:12
+    depends_on:
+      - postgres
+    container_name: "node_backend"
+    build:
+      context: ./node-app
+    expose: # for linked services only!
+      - "2999"
+    ports:
+      - "3999:2999"
+      - "9339:9229"
+    command:
+      - npm
+      - "run"
+      - "debug:all"
+    links:
+      # Link services to access http://pg and  http://postgres inside the container
+      - postgres:pg
+    volumes:
+      - ./node-app/src:/usr/src/app/src
+      - /usr/src/app/node_modules
+
+    networks:
+      mpern:
+        ipv4_address: 172.25.0.3
+
+  postgres:
+    image: "postgres:12"
+    container_name: "postgres_db"
+    # working_dir: /var/lib/postgresql
+    build:
+      context: ./postgres-db/
+      # args:
+      # - UID:${UID}
+      # - USER:${USER}
+    # expose: # for linked services only!
+    # - "5432"
+    # ports:
+    # - "5432:5432"
+    env_file:
+      - postgres-db/.env
+      - .env
+    environment:
+      - "UID:${UID}"
+      - "POSTGRES_DB:${POSTGRES_DB}"
+      - "PGDATA:${PGDATA}" # default:/var/lib/postgresql/data
+      - "POSTGRES_USER:${POSTGRES_USER}"
+      - "POSTGRES_PASSWORD:${POSTGRES_PASSWORD}"
+    volumes:
+      - ./postgres-db/db_data:/var/lib/postgresql/data
+      - ./postgres-db/init-scripts:/docker-entrypoint-initdb.d/init-scripts
+    networks:
+      mpern:
+        ipv4_address: 172.25.0.2
+  react_frontend:
+    image: node:12
+    depends_on:
+      - node_backend
+      - postgres
+    container_name: "react_frontend"
+    # tty: true
+    stdin_open: true
+    build:
+      context: ./react-app
+    ports:
+      - "3000:3000"
+      - "9449:9222"
+
+      # - "35729:35729"
+    links:
+      # Link services to access http://app and  http://api inside the container
+      - node_backend:api
+    volumes:
+      - ./react-app:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      mpern:
+        ipv4_address: 172.25.0.4
+
+networks:
+  mpern:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16

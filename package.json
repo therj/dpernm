@@ -1,0 +1,16 @@
+{
+  "name": "docker-node-react-postgres-mongodb-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "preup": "mkdir -p postgres-db/db_data && export UID=$(echo UID)",
+    "up": "docker-compose  up -d",
+    "stop": "docker-compose stop",
+    "down": "docker-compose down",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
