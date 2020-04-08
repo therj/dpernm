@@ -1,0 +1,73 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Node: Docker",
+      "port": 9339, // exposed port!
+      "localRoot": "${workspaceFolder}/node-app",
+      "remoteRoot": "/usr/src/app",
+      "restart": true,
+      "stopOnEntry": false,
+      "sourceMaps": false
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "React: Docker",
+      // "url": "http://localhost:3000/",
+      "urlFilter": "http://localhost:3000",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}/react-app/src",
+      "sourceMapPathOverrides": {
+        "/usr/src/app/src/*": "${webRoot}/*"
+      }
+      // "skipFiles": ["node_modules/**"],
+      // "smartStep": true,
+      // "sourceMaps": true
+    },
+    {
+      "name": "Node Debug",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      // "address": "localhost",
+      "address": "172.25.0.3",
+      // "address": "172.23.0.3", // docker IP
+      //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
+      "restart": true,
+      "stopOnEntry": false,
+      "sourceMaps": false,
+      "localRoot": "${workspaceRoot}/node-app",
+      // "remoteRoot": "${workspaceRoot}/node-app"
+      "remoteRoot": "/usr/src/app"
+    },
+    {
+      "name": "React Debug",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      // "address": "localhost",
+      "address": "172.25.0.4",
+      // "address": "172.23.0.3", // docker IP
+      //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
+      "restart": true,
+      "stopOnEntry": false,
+      "sourceMaps": false,
+      "localRoot": "${workspaceRoot}/react-app/src",
+      // "remoteRoot": "${workspaceRoot}/node-app"
+      "remoteRoot": "/usr/src/app/src"
+    }
+  ]
+}
