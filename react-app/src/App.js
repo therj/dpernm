@@ -19,13 +19,16 @@ class App extends Component {
     const data = this.state.data.map((item) =>
       <li key={item.id}>{item.firstname} {item.lastname}</li>
     )
-    return (
-      <div>
-        <ol>
-          {data}
-        </ol>
-      </div>
-    );
+    if (this.state.data.length) {
+      return (
+        <div>
+          <ol>
+            {data}
+          </ol>
+        </div>
+      )
+    }
+    return <p>No data {data}</p>
   }
 }
 export default App;
