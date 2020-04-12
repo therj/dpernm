@@ -1,5 +1,62 @@
 version: "3.7"
 services:
+  postgres:
+    image: "postgres:12"
+    container_name: "postgres_db"
+    # working_dir: /var/lib/postgresql
+    build:
+      context: ./postgres-db/
+      # args:
+      # - UID:${UID}
+      # - USER:${USER}
+    # expose: # for linked services only!
+    # - "5432"
+    # ports:
+    # - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=${PGDATA} # default:/var/lib/postgresql/data
+      # - POSTGRES_INITDB_ARGS:${POSTGRES_INITDB_ARGS}"
+    volumes:
+      - ./postgres-db/db_data:/var/lib/postgresql/data:rw
+      - ./postgres-db/init-scripts/:/docker-entrypoint-initdb.d/
+
+      # - ./postgres-db/init-scripts/00-init.sh:/docker-entrypoint-initdb.d/00-init.sh
+      # - ./postgres-db/init-scripts/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      # - ./postgres-db/init-scripts:/usr/local/bin/docker-entrypoint.s/init-scripts
+    networks:
+      mpern:
+        ipv4_address: 172.25.0.2
+  # mongodb:
+  #     image: mongo:latest
+  #     container_name: "mongo_db"
+  #     environment:
+  #       MONGO_INITDB_ROOT_USERNAME: root
+  #       MONGO_INITDB_ROOT_PASSWORD: example
+  #       MONGO_INITDB_DATABASE: saas
+  #       MONGO_NON_ROOT_USERNAME: saas
+  #       MONGO_NON_ROOT_PASSWORD: secret
+  #     networks:
+  #       mpern:
+  #         ipv4_address: 172.25.0.2
+
+  # mongo-express:
+  #     image: mongo-express
+  #     container_name: "mongo_express"
+  #     restart: always
+  #     ports:
+  #       - 8081:8081
+  #     environment:
+  #       ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #       ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #     networks:
+  #      mpern:
+  #       ipv4_address: 172.25.0.2
+
   node_backend:
     image: node:12
     depends_on:
@@ -19,6 +76,10 @@ services:
     links:
       # Link services to access http://pg and  http://postgres inside the container
       - postgres:pg
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
     volumes:
       - ./node-app/src:/usr/src/app/src
       - /usr/src/app/node_modules
@@ -27,54 +88,37 @@ services:
       mpern:
         ipv4_address: 172.25.0.3
 
-  postgres:
-    image: "postgres:12"
-    container_name: "postgres_db"
-    # working_dir: /var/lib/postgresql
-    build:
-      context: ./postgres-db/
-      # args:
-      # - UID:${UID}
-      # - USER:${USER}
-    # expose: # for linked services only!
-    # - "5432"
-    # ports:
-    # - "5432:5432"
-    env_file:
-      - postgres-db/.env
-      - .env
-    environment:
-      - "UID:${UID}"
-      - "POSTGRES_DB:${POSTGRES_DB}"
-      - "PGDATA:${PGDATA}" # default:/var/lib/postgresql/data
-      - "POSTGRES_USER:${POSTGRES_USER}"
-      - "POSTGRES_PASSWORD:${POSTGRES_PASSWORD}"
-    volumes:
-      - ./postgres-db/db_data:/var/lib/postgresql/data
-      - ./postgres-db/init-scripts:/docker-entrypoint-initdb.d/init-scripts
-    networks:
-      mpern:
-        ipv4_address: 172.25.0.2
   react_frontend:
     image: node:12
     depends_on:
-      - node_backend
       - postgres
+      - node_backend
     container_name: "react_frontend"
-    # tty: true
+    tty: true
     stdin_open: true
     build:
       context: ./react-app
+    expose: # for linked services only!
+      - "3000"
     ports:
-      - "3000:3000"
+      - "3344:3000"
       - "9449:9222"
 
       # - "35729:35729"
+    command:
+      - npm
+      - "run"
+      - "start"
     links:
       # Link services to access http://app and  http://api inside the container
       - node_backend:api
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=${REACT_APP_NODE_ENV}
+      - CHOKIDAR_USEPOLLING=1
     volumes:
-      - ./react-app:/usr/src/app
+      - ./react-app/src:/usr/src/app/src
       - /usr/src/app/node_modules
     networks:
       mpern:

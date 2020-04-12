@@ -3,8 +3,8 @@ const morgan = require(`morgan`);
 const helmet = require(`helmet`);
 const middleware = require(`./middleware`);
 const setup = require(`./setup`);
-const routesV1 = require('./routes/v1/index.js')
-const routesV2 = require('./routes/v2/index.js')
+const routesV1 = require('./routes/v1')
+const routesV2 = require('./routes/v2')
 // colorful console
 require(`console-info`);
 require(`console-warn`);
