@@ -10,6 +10,6 @@ COPY . .
 # React's debugging port is 35729
 # EXPOSE 35729
 # CMD [ "npm", "start" ]
-ENV NODE_PATH=/usr/src/app/node_modules
-ENV PATH=$PATH:/usr/src/app/node_modules/.bin
+# ENV NODE_PATH=/usr/src/app/node_modules
+# ENV PATH=$PATH:/usr/src/app/node_modules/.bin
 
