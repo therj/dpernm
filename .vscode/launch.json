@@ -40,10 +40,11 @@
       "address": "localhost",
       "restart": true,
       "stopOnEntry": false,
-      "sourceMaps": false,
-      "localRoot": "${workspaceRoot}/node-app", // FIXME: Probably unnecessary
-      "remoteRoot": "${workspaceRoot}/node-app" // FIXME: Probably unnecessary
-      // "remoteRoot": "/app"
+      "skipFiles": ["node_modules/**"],
+      "smartStep": true,
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}/node-app/src",
+      "remoteRoot": "/src"
     },
     {
       "type": "chrome",
