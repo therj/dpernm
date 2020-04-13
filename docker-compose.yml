@@ -6,7 +6,8 @@ services:
     container_name: "postgres_db"
     restart: on-failure
     # working_dir: /var/lib/postgresql
-    # unnecessary!
+    # /data
+    # build.context is unnecessary!
     build:
       context: ./postgres-db/
       # args:
@@ -25,7 +26,7 @@ services:
       - PGDATA=${PGDATA} # default:/var/lib/postgresql/data
       # - POSTGRES_INITDB_ARGS:${POSTGRES_INITDB_ARGS}"
     volumes:
-      - "./postgres-db/db_data:/var/lib/postgresql/data"
+      - "./postgres-db/db_data:/data"
       - "./postgres-db/init-scripts/:/docker-entrypoint-initdb.d/"
 
       # - ./postgres-db/init-scripts/00-init.sh:/docker-entrypoint-initdb.d/00-init.sh
@@ -83,8 +84,8 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
     volumes:
-      - "./node-app/src:/usr/src/app/src"
-      - "/usr/src/app/node_modules"
+      - "./node-app/src:/app/src"
+      - "/app/node_modules"
 
     networks:
       mpern:
@@ -120,9 +121,9 @@ services:
       - NODE_ENV=${REACT_APP_NODE_ENV}
       - CHOKIDAR_USEPOLLING=1
     volumes:
-      - "./react-app:/usr/src/app"
-      # - "./react-app:/usr/src/app"
-      - "/usr/src/app/node_modules"
+      - "./react-app:/app"
+      # - "./react-app:/app"
+      - "/app/node_modules"
     networks:
       mpern:
         ipv4_address: 172.25.0.4

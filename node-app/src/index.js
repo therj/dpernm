@@ -3,6 +3,9 @@ const morgan = require(`morgan`);
 const helmet = require(`helmet`);
 const middleware = require(`./middleware`);
 const setup = require(`./setup`);
+setup.envSetup()
+// setup.dbSetup();
+// require routes after env & db Setup!
 const routesV1 = require('./routes/v1')
 const routesV2 = require('./routes/v2')
 // colorful console
@@ -10,11 +13,10 @@ require(`console-info`);
 require(`console-warn`);
 require(`console-error`);
 
-const cors = require(`cors`);
+// const cors = require(`cors`);
 
 const app = express();
 setup.envSetup();
-// setup.dbSetup();
 
 app.use(middleware.rateLimiter());
 app.use(express.json());
@@ -22,8 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan(`common`));
 app.use(helmet());
-// app.use(setup.corsSetup());
-app.use(cors())
+app.use(setup.corsSetup());
+// app.use(cors())
 
 app.use(middleware.modifyResponseBody);
 app.use('/', routesV1)

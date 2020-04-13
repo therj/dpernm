@@ -1,12 +1,12 @@
 FROM node:12
-WORKDIR /usr/src/app
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+WORKDIR /app
 
 COPY package*.json ./
 # RUN rm -r node_modules
-RUN npm install react-scripts@3.4.1 -g --silent
+# RUN npm install react-scripts@3.4.1 -g --silent
 
 RUN npm install
+ENV PATH /app/node_modules/.bin:$PATH
 # --silent
 # RUN npm install react-scripts@3.4.1 -g
 # --silent
@@ -17,6 +17,6 @@ COPY . .
 # EXPOSE 35729
 # CMD ["npm", "start" ]
 
-# ENV NODE_PATH=/usr/src/app/node_modules
-# ENV PATH=$PATH:/usr/src/app/node_modules/.bin
+# ENV NODE_PATH=/app/node_modules
+# ENV PATH=$PATH:/app/node_modules/.bin
 

@@ -1,26 +1,28 @@
 const router = require('express').Router()
 const Pool = require('pg').Pool
+const { POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env
+
 const pool = new Pool({
-  host: 'pg',
-  port: 5432,
-  user: 'pernm',
-  password: 'pernm',
-  database: 'pernm'
+  host: POSTGRES_HOST,
+  port: POSTGRES_PORT,
+  user: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB
 })
 
-router.get('/', (request, response) => {
+router.get('/', (req, res) => {
   let q = 'SELECT * FROM data ORDER BY id ASC';
   try {
     pool.query(q, (error, results) => {
       if (error) {
         // throw error
-        return response.status(500).json(error)
+        return res.status(500).json(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
     })
 
   } catch (err) {
-    response.status(200).json(err)
+    res.status(200).json(err)
   }
 })
 

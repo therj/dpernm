@@ -5,19 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
       "type": "node",
       "request": "attach",
       "name": "Node: Docker",
       "port": 9339, // exposed port!
       "localRoot": "${workspaceFolder}/node-app",
-      "remoteRoot": "/usr/src/app",
+      "remoteRoot": "/app",
       "restart": true,
       "stopOnEntry": false,
       "sourceMaps": false
@@ -31,7 +24,7 @@
       "port": 9222,
       "webRoot": "${workspaceFolder}/react-app/src",
       "sourceMapPathOverrides": {
-        "/usr/src/app/src/*": "${webRoot}/*"
+        "/app/src/*": "${webRoot}/*"
       }
       // "skipFiles": ["node_modules/**"],
       // "smartStep": true,
@@ -51,7 +44,7 @@
       "sourceMaps": false,
       "localRoot": "${workspaceRoot}/node-app",
       // "remoteRoot": "${workspaceRoot}/node-app"
-      "remoteRoot": "/usr/src/app"
+      "remoteRoot": "/app"
     },
     {
       "name": "React Debug",
@@ -67,7 +60,23 @@
       "sourceMaps": false,
       "localRoot": "${workspaceRoot}/react-app/src",
       // "remoteRoot": "${workspaceRoot}/node-app"
-      "remoteRoot": "/usr/src/app/src"
+      "remoteRoot": "/app/src"
+    },
+    {
+      "name": "Node Local",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "address": "localhost",
+      // "address": "172.25.0.4",
+      // "address": "172.23.0.3", // docker IP
+      //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
+      "restart": true,
+      "stopOnEntry": false,
+      "sourceMaps": false
+      // "localRoot": "${workspaceRoot}/node-app/src"
+      // "remoteRoot": "${workspaceRoot}/node-app"
+      // "remoteRoot": "/app/src"
     }
   ]
 }
