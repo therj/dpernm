@@ -8,7 +8,7 @@ class App extends Component {
 
   async getTestQuery() {
 
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+    const API_BASE_URL = process.env.REACT_APP_API_URL
     console.log(`### ${API_BASE_URL} ###`)
     // this.setState({ data: [{ firstname: 'Don', lastname: 'John' }] })
     const API_BASE = `api/v1`

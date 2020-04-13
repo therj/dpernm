@@ -4,7 +4,7 @@ services:
   postgres:
     # image: "postgres:12"
     container_name: "postgres_db"
-    restart: on-failure
+    restart: always
     # working_dir: /var/lib/postgresql
     # /data
     # build.context is unnecessary!
@@ -26,14 +26,14 @@ services:
       - PGDATA=${PGDATA} # default:/var/lib/postgresql/data
       # - POSTGRES_INITDB_ARGS:${POSTGRES_INITDB_ARGS}"
     volumes:
-      - "./postgres-db/db_data:/data"
-      - "./postgres-db/init-scripts/:/docker-entrypoint-initdb.d/"
+      - ./postgres-db/db_data:/data
+      - ./postgres-db/init-scripts/:/docker-entrypoint-initdb.d/
 
       # - ./postgres-db/init-scripts/00-init.sh:/docker-entrypoint-initdb.d/00-init.sh
       # - ./postgres-db/init-scripts/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
       # - ./postgres-db/init-scripts:/usr/local/bin/docker-entrypoint.s/init-scripts
     networks:
-      mpern:
+      app_net:
         ipv4_address: 172.25.0.2
   # mongodb:
   #     image: mongo:latest
@@ -45,7 +45,7 @@ services:
   #       MONGO_NON_ROOT_USERNAME: saas
   #       MONGO_NON_ROOT_PASSWORD: secret
   #     networks:
-  #       mpern:
+  #       app_net:
   #         ipv4_address: 172.25.0.2
 
   # mongo-express:
@@ -58,13 +58,13 @@ services:
   #       ME_CONFIG_MONGODB_ADMINUSERNAME: root
   #       ME_CONFIG_MONGODB_ADMINPASSWORD: example
   #     networks:
-  #      mpern:
+  #      app_net:
   #       ipv4_address: 172.25.0.2
 
   node_backend:
     # image: node:12
     container_name: node_backend
-    restart: on-failure
+    restart: always
 
     build:
       context: ./node-app
@@ -84,16 +84,16 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
     volumes:
-      - "./node-app/src:/app/src"
-      - "/app/node_modules"
+      - ./node-app/src:/app/src
+      - /app/node_modules
 
     networks:
-      mpern:
+      app_net:
         ipv4_address: 172.25.0.3
 
   react_frontend:
     # image: node:12
-    restart: on-failure
+    restart: always
     container_name: react_frontend
     # tty: true
     stdin_open: true
@@ -121,15 +121,15 @@ services:
       - NODE_ENV=${REACT_APP_NODE_ENV}
       - CHOKIDAR_USEPOLLING=1
     volumes:
-      - "./react-app:/app"
-      # - "./react-app:/app"
-      - "/app/node_modules"
+      - ./react-app:/app
+      # - ./react-app:/app"
+      - /app/node_module
     networks:
-      mpern:
+      app_net:
         ipv4_address: 172.25.0.4
 
 networks:
-  mpern:
+  app_net:
     driver: bridge
     ipam:
       driver: default

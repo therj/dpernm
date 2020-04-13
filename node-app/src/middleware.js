@@ -1,5 +1,7 @@
 const rateLimit = require(`express-rate-limit`);
 const mung = require(`express-mung`);
+const { attachRequestToResponse } = require(`./helpers`);
+const cloneDeep = require(`lodash.clonedeep`);
 
 // Not found
 const notFound = (req, res, next) => {
@@ -20,12 +22,23 @@ const errorHandler = (error, _req, res, next) => {
   next();
 };
 
+const cloneRequestObject = (req, res, next) => {
+  if (attachRequestToResponse(req)) {
+    res.locals.requestClone = {
+      body: cloneDeep(req.body),
+      // params: cloneDeep(req.params),
+      // query: cloneDeep(req.query),
+      headers: cloneDeep(req.headers),
+    };
+  }
+  next();
+};
 // eslint-disable-next-line no-unused-vars
-const modifyResponseBody = (body, req, _res) => {
+const modifyResponseBody = (body, req, res) => {
   // Modify response here
   // Attach the request to response, if requested
-  if (body && req.body.returnRequest) {
-    body.request = { body: req.body, headers: req.headers };
+  if (attachRequestToResponse(req && res.locals && res.locals.requestClone)) {
+    body.request = res.locals.requestClone;
   }
   return body;
 };
@@ -52,5 +65,6 @@ module.exports = {
   notFound,
   errorHandler,
   modifyResponseBody: mung.json(modifyResponseBody, { mungError: true }),
+  cloneRequestObject,
   rateLimiter,
 };

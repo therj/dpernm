@@ -50,8 +50,9 @@
       "name": "React Debug",
       "type": "node",
       "request": "attach",
-      "port": 9229,
+      // "port": 9449,
       // "address": "localhost",
+      "port": 9229,
       "address": "172.25.0.4",
       // "address": "172.23.0.3", // docker IP
       //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name

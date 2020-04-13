@@ -28,6 +28,7 @@
     "express-mung": "richardschneider/express-mung#6efded3",
     "express-rate-limit": "^5.1.1",
     "helmet": "^3.22.0",
+    "lodash.clonedeep": "^4.5.0",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "pg": "^8.0.0"
