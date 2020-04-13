@@ -103,7 +103,7 @@ services:
       - 3000
     ports:
       - 3344:3000
-      - 9449:9222
+      - 9449:9222 # FIXME: can remove, test!
       # - "35729:35729"
     command: npm start
     # - npm

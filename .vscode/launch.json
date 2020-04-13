@@ -5,79 +5,60 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "attach",
       "name": "Node: Docker",
-      "port": 9339, // exposed port!
-      "localRoot": "${workspaceFolder}/node-app",
-      "remoteRoot": "/app",
-      "restart": true,
-      "stopOnEntry": false,
-      "sourceMaps": false
-    },
-    {
-      "type": "chrome",
-      "request": "attach",
-      "name": "React: Docker",
-      // "url": "http://localhost:3000/",
-      "urlFilter": "http://localhost:3000",
-      "port": 9222,
-      "webRoot": "${workspaceFolder}/react-app/src",
-      "sourceMapPathOverrides": {
-        "/app/src/*": "${webRoot}/*"
-      }
-      // "skipFiles": ["node_modules/**"],
-      // "smartStep": true,
-      // "sourceMaps": true
-    },
-    {
-      "name": "Node Debug",
       "type": "node",
       "request": "attach",
-      "port": 9229,
-      // "address": "localhost",
-      "address": "172.25.0.3",
-      // "address": "172.23.0.3", // docker IP
+      "port": 9229, // mapped to 9229, explicitly binded in start script. Default is also 9229
+      "address": "172.25.0.3", // docker IP
       //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
       "restart": true,
       "stopOnEntry": false,
       "sourceMaps": false,
       "localRoot": "${workspaceRoot}/node-app",
-      // "remoteRoot": "${workspaceRoot}/node-app"
       "remoteRoot": "/app"
     },
     {
-      "name": "React Debug",
+      "type": "chrome",
+      "request": "attach",
+      "name": "React: Docker",
+      "url": "http://172.25.0.4:3000/",
+      "urlFilter": "http://172.25.0.4:3000/",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}/react-app/src",
+      "sourceMapPathOverrides": {
+        "/app/src/*": "${webRoot}/*"
+      },
+      "skipFiles": ["node_modules/**"],
+      "smartStep": true,
+      "sourceMaps": true
+    },
+    {
+      "name": "Node: Local",
       "type": "node",
       "request": "attach",
-      // "port": 9449,
-      // "address": "localhost",
-      "port": 9229,
-      "address": "172.25.0.4",
-      // "address": "172.23.0.3", // docker IP
-      //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
+      "port": 9339, // mapped to 9229, explicitly binded in start script. Same as default!
+      "address": "localhost",
       "restart": true,
       "stopOnEntry": false,
       "sourceMaps": false,
-      "localRoot": "${workspaceRoot}/react-app/src",
-      // "remoteRoot": "${workspaceRoot}/node-app"
-      "remoteRoot": "/app/src"
+      "localRoot": "${workspaceRoot}/node-app", // FIXME: Probably unnecessary
+      "remoteRoot": "${workspaceRoot}/node-app" // FIXME: Probably unnecessary
+      // "remoteRoot": "/app"
     },
     {
-      "name": "Node Local",
-      "type": "node",
+      "type": "chrome",
       "request": "attach",
-      "port": 9229,
-      "address": "localhost",
-      // "address": "172.25.0.4",
-      // "address": "172.23.0.3", // docker IP
-      //  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
-      "restart": true,
-      "stopOnEntry": false,
-      "sourceMaps": false
-      // "localRoot": "${workspaceRoot}/node-app/src"
-      // "remoteRoot": "${workspaceRoot}/node-app"
-      // "remoteRoot": "/app/src"
+      "name": "React: Local",
+      "url": "http://localhost:3344/",
+      "urlFilter": "http://localhost:3344/",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}/react-app/src",
+      "sourceMapPathOverrides": {
+        "/app/src/*": "${webRoot}/*"
+      },
+      "skipFiles": ["node_modules/**"],
+      "smartStep": true,
+      "sourceMaps": true
     }
   ]
 }
