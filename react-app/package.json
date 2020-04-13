@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "startp": " PORT=3100 && react-scripts start",
     "start:new": "react-scripts --inspect start",
     "build": "react-scripts build",
     "test": "react-scripts test",

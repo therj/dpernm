@@ -6,12 +6,21 @@ class App extends Component {
     this.getTestQuery();
   };
 
-  getTestQuery() {
-    // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
-    // console.log(API_BASE_URL)
-    const API_BASE = `/api/v1`
+  async getTestQuery() {
+
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+    console.log(`### ${API_BASE_URL} ###`)
+    // this.setState({ data: [{ firstname: 'Don', lastname: 'John' }] })
+    const API_BASE = `api/v1`
+    // const API_BASE = `http://172.25.0.4:3000/api`
+    console.log(`${API_BASE}/test_query`);
+    // const op await
+
     fetch(`${API_BASE}/test_query`)
-      .then(data => data.json())
+      .then(data => {
+        console.log(data)
+        return data.json()
+      })
       .then(res => this.setState({ data: res }))
   };
 
